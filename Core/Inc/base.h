@@ -1,4 +1,4 @@
-// base.hâ½‚ä»¶
+// base.h?¼ş
 #ifndef __BASE_H
 #define __BASE_H
 #include "stdlib.h"
@@ -7,7 +7,7 @@
 #include "main.h"
 #include "gpio.h"
 
-// å®šä¹‰å¯èƒ½ä¼šå‡ºç°çš„å…¼å®¹å˜é‡ç±»å‹
+// ¶¨Òå¿ÉÄÜ»á³öÏÖµÄ¼æÈİ±äÁ¿ÀàĞÍ
 #define u32 uint32_t
 #define u16 uint16_t
 #define u8 uint8_t
@@ -15,7 +15,7 @@
 #define s16 int16_t
 #define s8 int8_t
 
-// LEDç”µå¹³è®¾ç½® 0-äº® 1-ç­
+// LEDµçÆ½ÉèÖÃ 0-ÁÁ 1-Ãğ
 #define LED0(n) (n?HAL_GPIO_WritePin(LED0_GPIO_Port,LED0_Pin,GPIO_PIN_SET):HAL_GPIO_WritePin(LED0_GPIO_Port,LED0_Pin,GPIO_PIN_RESET))
 #define LED0_T (HAL_GPIO_TogglePin(LED0_GPIO_Port, LED0_Pin))
 #define LED0_ON LED0(0)
@@ -25,24 +25,24 @@
 #define LED1_ON LED1(0)
 #define LED1_OFF LED1(1)
 
-// æŒ‰é”®éƒ¨åˆ†å¸¸ç”¨
-// ä¸ä½¿ç”¨æ—¶æ³¨é‡Š
-#define KEY0        HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5)  //KEY0æŒ‰é”®PC5
-#define KEY1        HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_15) //KEY1æŒ‰é”®PA15
-#define WK_UP       HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0)  //WKUPæŒ‰é”®PA0
+// °´¼ü²¿·Ö³£ÓÃ
+// ²»Ê¹ÓÃÊ±×¢ÊÍ
+#define KEY0        HAL_GPIO_ReadPin(GPIOC,GPIO_PIN_5)  //KEY0°´¼üPC5
+#define KEY1        HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_15) //KEY1°´¼üPA15
+#define WK_UP       HAL_GPIO_ReadPin(GPIOA,GPIO_PIN_0)  //WKUP°´¼üPA0
 #define KEY0_PRES 1
 #define KEY1_PRES 2
 #define WKUP_PRES 3
-u8 KEY_Scan(u8 mode); //æŒ‰é”®æ‰«æå‡½æ•°
+u8 KEY_Scan(u8 mode); //°´¼üÉ¨Ãèº¯Êı
 
-// è‡ªå®šä¹‰delayå‡½æ•°ï¼Œå…¼å®¹éƒ¨åˆ†ç¡¬ä»¶åº“
+// ×Ô¶¨Òådelayº¯Êı£¬¼æÈİ²¿·ÖÓ²¼ş¿â
 void delay_init(u8 SYSCLK);
 void delay_ms(u16 nms);
 void delay_us(u32 nus);
 void delay_ns (u8 t);
 
 
-//IOâ¼åœ°å€æ˜ å°„
+//IO?µØÖ·Ó³Éä
 #define BITBAND(addr, bitnum) ((addr & 0xF0000000)+0x2000000+((addr&0xFFFFF)<<5)+(bitnum<<2))
 #define MEM_ADDR(addr) *((volatile unsigned long *)(addr))
 #define BIT_ADDR(addr, bitnum) MEM_ADDR(BITBAND(addr, bitnum))
@@ -61,27 +61,27 @@ void delay_ns (u8 t);
 #define GPIOE_IDR_Addr    (GPIOE_BASE+8) //0x40011808 
 #define GPIOF_IDR_Addr    (GPIOF_BASE+8) //0x40011A08 
 #define GPIOG_IDR_Addr    (GPIOG_BASE+8) //0x40011E08 
-//IOâ¼æ“ä½œ,åªå¯¹å•â¼€çš„IOâ¼
-//ç¡®ä¿nçš„å€¼â¼©äº16
+//IO?²Ù×÷,Ö»¶Ôµ¥?µÄIO?
+//È·±£nµÄÖµ?ÓÚ16
 
-#define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //è¾“å‡º 
-#define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //è¾“å…¥ 
+#define PAout(n)   BIT_ADDR(GPIOA_ODR_Addr,n)  //Êä³ö 
+#define PAin(n)    BIT_ADDR(GPIOA_IDR_Addr,n)  //ÊäÈë 
 
-#define PBout(n)   BIT_ADDR(GPIOB_ODR_Addr,n)  //è¾“å‡º 
-#define PBin(n)    BIT_ADDR(GPIOB_IDR_Addr,n)  //è¾“å…¥ 
+#define PBout(n)   BIT_ADDR(GPIOB_ODR_Addr,n)  //Êä³ö 
+#define PBin(n)    BIT_ADDR(GPIOB_IDR_Addr,n)  //ÊäÈë 
 
-#define PCout(n)   BIT_ADDR(GPIOC_ODR_Addr,n)  //è¾“å‡º 
-#define PCin(n)    BIT_ADDR(GPIOC_IDR_Addr,n)  //è¾“å…¥ 
+#define PCout(n)   BIT_ADDR(GPIOC_ODR_Addr,n)  //Êä³ö 
+#define PCin(n)    BIT_ADDR(GPIOC_IDR_Addr,n)  //ÊäÈë 
 
-#define PDout(n)   BIT_ADDR(GPIOD_ODR_Addr,n)  //è¾“å‡º 
-#define PDin(n)    BIT_ADDR(GPIOD_IDR_Addr,n)  //è¾“å…¥ 
+#define PDout(n)   BIT_ADDR(GPIOD_ODR_Addr,n)  //Êä³ö 
+#define PDin(n)    BIT_ADDR(GPIOD_IDR_Addr,n)  //ÊäÈë 
 
-#define PEout(n)   BIT_ADDR(GPIOE_ODR_Addr,n)  //è¾“å‡º 
-#define PEin(n)    BIT_ADDR(GPIOE_IDR_Addr,n)  //è¾“å…¥
+#define PEout(n)   BIT_ADDR(GPIOE_ODR_Addr,n)  //Êä³ö 
+#define PEin(n)    BIT_ADDR(GPIOE_IDR_Addr,n)  //ÊäÈë
 
-#define PFout(n)   BIT_ADDR(GPIOF_ODR_Addr,n)  //è¾“å‡º 
-#define PFin(n)    BIT_ADDR(GPIOF_IDR_Addr,n)  //è¾“å…¥
+#define PFout(n)   BIT_ADDR(GPIOF_ODR_Addr,n)  //Êä³ö 
+#define PFin(n)    BIT_ADDR(GPIOF_IDR_Addr,n)  //ÊäÈë
 
-#define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)  //è¾“å‡º 
-#define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)  //è¾“å…¥
+#define PGout(n)   BIT_ADDR(GPIOG_ODR_Addr,n)  //Êä³ö 
+#define PGin(n)    BIT_ADDR(GPIOG_IDR_Addr,n)  //ÊäÈë
 #endif

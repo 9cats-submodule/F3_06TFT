@@ -4,7 +4,7 @@
  *      *** Do not modify ! ***
  *
  * Project: '06TFT' 
- * Target:  '05W25QXX' 
+ * Target:  '06TFT' 
  */
 
 #ifndef RTE_COMPONENTS_H

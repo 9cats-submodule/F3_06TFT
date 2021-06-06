@@ -77,6 +77,8 @@
                                     									
                                     <listOptionValue builtIn="false" value="../Core/Inc"/>
                                     									
+                                    <listOptionValue builtIn="false" value="../Drivers/TFT_Driver/Inc"/>
+                                    									
                                     <listOptionValue builtIn="false" value="../Drivers/F1_W24QXX_Driver/Inc"/>
                                     									
                                     <listOptionValue builtIn="false" value="../Drivers/F1_TOUCH_Driver/Inc"/>
@@ -336,5 +338,7 @@
     </storageModule>
     	
     <storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+    	
+    <storageModule moduleId="refreshScope"/>
     
 </cproject>

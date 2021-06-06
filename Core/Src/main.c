@@ -28,6 +28,8 @@
 #include "lcd.h"
 #include "touch.h"
 #include "w25qxx.h"
+#include "hmi_user_uart.h"
+#include "hmi_driver.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -37,6 +39,7 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define TP_CHECK(x0,y0,x1,y1) tp_dev.x[0] > x0 && tp_dev.y[0] > y0 && tp_dev.x[0] < x1 && tp_dev.y[0] < y1
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -68,11 +71,7 @@ u8 A;
 int main(void)
 {
   /* USER CODE BEGIN 1 */
-
-	u32 fontcnt;		  
-	u8 i,j;
-	u8 fontx[2];						//gbk码
-	u8 key,t;
+    u8 key;
   /* USER CODE END 1 */
 
   /* MCU Configuration--------------------------------------------------------*/
@@ -98,50 +97,9 @@ int main(void)
   /* USER CODE BEGIN 2 */
   delay_init(72);
   LCD_Init();
-	font_init();
+  font_init();
   tp_dev.init();
-
-	POINT_COLOR=RED;       
-	Show_Str(30,50,200,16,"Mini STM32开发板",16,0);				    	 
-	Show_Str(30,70,200,16,"GBK字库测试程序",16,0);				    	 
-	Show_Str(30,90,200,16,"正点原子@ALIENTEK",16,0);				    	 
-	Show_Str(30,110,200,16,"2019年11月18日",16,0);
-	Show_Str(30,130,200,16,"按KEY0,更新字库",16,0);
- 	POINT_COLOR=BLUE;  
-	Show_Str(30,150,200,16,"内码高字节:",16,0);				    	 
-	Show_Str(30,170,200,16,"内码低字节:",16,0);				    	 
-	Show_Str(30,190,200,16,"汉字计数器:",16,0);
-
-	Show_Str(30,220,200,24,"对应汉字为:",24,0); 
-	Show_Str(30,244,200,16,"对应汉字(16*16)为:",16,0);			 
-	Show_Str(30,260,200,12,"对应汉字(12*12)为:",12,0);
-	while(1)
-	{
-		fontcnt=0;
-		for(i=0x81;i<0xff;i++)
-		{		
-			fontx[0]=i;
-			LCD_ShowNum(118,150,i,3,16);		//显示内码高字节    
-			for(j=0x40;j<0xfe;j++)
-			{
-				if(j==0x7f)continue;
-				fontcnt++;
-				LCD_ShowNum(118,170,j,3,16);	//显示内码低字节	 
-				LCD_ShowNum(118,190,fontcnt,5,16);//汉字计数显示	 
-			 	fontx[1]=j;
-				Show_Font(30+132,220,fontx,24,0);	  
-				Show_Font(30+144,244,fontx,16,0);	  		 		 
-				Show_Font(30+108,260,fontx,12,0);	  		 		 
-				t=200;
-				while(t--)//延时,同时扫描按键
-				{
-					delay_ms(1);
-					key=KEY_Scan(0);
-				}
-				LED0_T;
-			}   
-		}	
-	}
+  TFT_Init();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -151,6 +109,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+    delay_ms(50);
+    key = KEY_Scan(0);
+    if(key == KEY0_PRES)
+    {
+	  SetButtonValue(3,1,0);
+    }
+    if(key == KEY1_PRES)
+    {
+	  SetButtonValue(3,1,1);
+    }
   }
   /* USER CODE END 3 */
 }

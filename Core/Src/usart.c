@@ -21,7 +21,8 @@
 #include "usart.h"
 
 /* USER CODE BEGIN 0 */
-
+#include "cmd_queue.h"
+#include "cmd_process.h"
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -118,7 +119,20 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-
+extern unsigned char RxBuffer;
+extern unsigned char TxBuffer;
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+  if (huart->Instance == USART1)
+  {
+     huart1.RxState = HAL_UART_STATE_READY;
+     __HAL_UNLOCK(&huart1);
+     queue_push(RxBuffer);
+     // Param_Update();//中断里面处理完指令
+     SendChar(RxBuffer);
+		 HAL_UART_Receive_IT(&huart1, &RxBuffer, 1);
+  }
+}
 /* USER CODE END 1 */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

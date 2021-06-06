@@ -1,11 +1,11 @@
-// base.câ½‚ä»¶
+// base.c?¼ş
 #include "base.h"
-static u8 fac_us = 0; //uså»¶æ—¶å€ä¹˜æ•°
-//åˆå§‹åŒ–å»¶è¿Ÿå‡½æ•°
-//SYSTICKçš„æ—¶é’Ÿå›ºå®šä¸ºHCLKæ—¶é’Ÿçš„1/8
-//SYSCLK:ç³»ç»Ÿæ—¶é’Ÿ
+static u8 fac_us = 0; //usÑÓÊ±±¶³ËÊı
+//³õÊ¼»¯ÑÓ³Ùº¯Êı
+//SYSTICKµÄÊ±ÖÓ¹Ì¶¨ÎªHCLKÊ±ÖÓµÄ1/8
+//SYSCLK:ÏµÍ³Ê±ÖÓ
 void delay_init(u8 SYSCLK) {
-	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK); //SysTické¢‘ç‡ä¸ºHCLK
+	HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK); //SysTickÆµÂÊÎªHCLK
 	fac_us = SYSCLK;
 }
 void delay_ns(u8 t) {
@@ -16,40 +16,40 @@ void delay_ns(u8 t) {
 void delay_us(u32 nus) {
 	u32 ticks;
 	u32 told, tnow, tcnt = 0;
-	u32 reload = SysTick->LOAD; //LOADçš„å€¼
-	ticks = nus * fac_us;       //éœ€è¦çš„èŠ‚æ‹æ•°
-	told = SysTick->VAL;        //åˆšè¿›â¼Šæ—¶çš„è®¡æ•°å™¨å€¼
+	u32 reload = SysTick->LOAD; //LOADµÄÖµ
+	ticks = nus * fac_us;       //ĞèÒªµÄ½ÚÅÄÊı
+	told = SysTick->VAL;        //¸Õ½ø?Ê±µÄ¼ÆÊıÆ÷Öµ
 	while (1) {
 		tnow = SysTick->VAL;
 		if (tnow != told) {
 			if (tnow < told)
-				tcnt += told - tnow; //è¿™â¾¥æ³¨æ„â¼€ä¸‹SYSTICKæ˜¯â¼€ä¸ªé€’å‡çš„è®¡æ•°å™¨å°±å¯ä»¥äº†.
+				tcnt += told - tnow; //Õâ?×¢Òâ?ÏÂSYSTICKÊÇ?¸öµİ¼õµÄ¼ÆÊıÆ÷¾Í¿ÉÒÔÁË.
 			else
 				tcnt += reload - tnow + told;
 			told = tnow;
 			if (tcnt >= ticks)
-				break; //æ—¶é—´è¶…è¿‡/ç­‰äºè¦å»¶è¿Ÿçš„æ—¶é—´,åˆ™é€€å‡º.
+				break; //Ê±¼ä³¬¹ı/µÈÓÚÒªÑÓ³ÙµÄÊ±¼ä,ÔòÍË³ö.
 		}
 	};
 }
-//å»¶æ—¶nms
-//nms:è¦å»¶æ—¶çš„msæ•°
+//ÑÓÊ±nms
+//nms:ÒªÑÓÊ±µÄmsÊı
 void delay_ms(u16 nms) {
 	u32 i;
 	for (i = 0; i < nms; i++)
 		delay_us(1000);
 }
-//æŒ‰é”®æ‰«æå‡½æ•°
-//ä¸ä½¿ç”¨æ—¶æ³¨é‡Š
-//è¿”å›æŒ‰é”®å€¼
-//mode:0,ä¸æ”¯æŒè¿ç»­æŒ‰;1,æ”¯æŒè¿ç»­æŒ‰;
-//0ï¼Œæ²¡æœ‰ä»»ä½•æŒ‰é”®æŒ‰ä¸‹
-//1ï¼ŒWKUPæŒ‰ä¸‹ WK_UP
-//æ³¨æ„æ­¤å‡½æ•°æœ‰å“åº”ä¼˜å…ˆçº§,KEY0>KEY1>KEY2>WK_UP!!
+//°´¼üÉ¨Ãèº¯Êı
+//²»Ê¹ÓÃÊ±×¢ÊÍ
+//·µ»Ø°´¼üÖµ
+//mode:0,²»Ö§³ÖÁ¬Ğø°´;1,Ö§³ÖÁ¬Ğø°´;
+//0£¬Ã»ÓĞÈÎºÎ°´¼ü°´ÏÂ
+//1£¬WKUP°´ÏÂ WK_UP
+//×¢Òâ´Ëº¯ÊıÓĞÏìÓ¦ÓÅÏÈ¼¶,KEY0>KEY1>KEY2>WK_UP!!
 u8 KEY_Scan(u8 mode)
 {
-    static u8 key_up=1;     //æŒ‰é”®æ¾å¼€æ ‡å¿—
-    if(mode==1)key_up=1;    //æ”¯æŒè¿æŒ‰
+    static u8 key_up=1;     //°´¼üËÉ¿ª±êÖ¾
+    if(mode==1)key_up=1;    //Ö§³ÖÁ¬°´
     if(key_up&&(KEY0==0||KEY1==0||WK_UP==1))
     {
         delay_ms(10);
@@ -58,5 +58,5 @@ u8 KEY_Scan(u8 mode)
         else if(KEY1==0)  return KEY1_PRES;
         else if(WK_UP==1) return WKUP_PRES;          
     }else if(KEY0==1&&KEY1==1&&WK_UP==0)key_up=1;
-    return 0;   //æ— æŒ‰é”®æŒ‰ä¸‹
+    return 0;   //ÎŞ°´¼ü°´ÏÂ
 }
