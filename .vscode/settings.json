@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "array": "c",
+        "initializer_list": "c",
+        "list": "c",
+        "type_traits": "c",
+        "vector": "c",
+        "xhash": "c",
+        "xstring": "c",
+        "xtree": "c",
+        "xutility": "c"
+    }
+}

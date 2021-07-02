@@ -62,7 +62,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-u8 A;
+extern u8 sendStatus,Txing_pos,Tx_pos;
 /* USER CODE END 0 */
 
 /**
@@ -111,12 +111,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	u16 Tx_size = TX_queue_find_cmd(TxBuffer,Tx_MAX_SIZE);
-    if(Tx_size)
-    {
-    	HAL_UART_Transmit_DMA(&huart1, TxBuffer, Tx_size);
-        LED1_T;
-    }
+	u16 Tx_size = Tx_stack_find_cmd(&TxBuffer);
 
     delay_ms(50);
     key = KEY_Scan(0);
@@ -128,6 +123,13 @@ int main(void)
     {
 	  SetButtonValue(3,1,1);
     }
+
+	if(Tx_size && !sendStatus)
+	{
+		Txing_pos = Tx_pos;
+		HAL_UART_Transmit_DMA(&huart1, TxBuffer, Tx_size);
+		sendStatus = 1;
+	}
   }
   /* USER CODE END 3 */
 }
