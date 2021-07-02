@@ -63,6 +63,11 @@ void END_CMD()
 
 #else//NO CRC16
 
+#define TX_8(P1) SEND_DATA((P1)&0xFF)  //发送单个字节
+#define TX_8N(P,N) SendNU8((uint8 *)P,N)  //发送N个字节
+#define TX_16(P1) TX_8((P1)>>8);TX_8(P1)  //发送16位整数
+#define TX_16N(P,N) SendNU16((uint16 *)P,N)  //发送N个16位整数
+#define TX_32(P1) TX_16((P1)>>16);TX_16((P1)&0xFFFF)  //发送32位整数
 #define SEND_DATA(P) SendChar(P)
 #define BEGIN_CMD() TX_8(0XEE)
 #define END_CMD() TX_32(0XFFFCFFFF)

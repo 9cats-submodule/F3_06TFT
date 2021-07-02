@@ -19,6 +19,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "dma.h"
 #include "spi.h"
 #include "usart.h"
 #include "gpio.h"
@@ -92,6 +93,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_SPI1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
@@ -109,6 +111,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	u16 Tx_size = TX_queue_find_cmd(TxBuffer,Tx_MAX_SIZE);
+    if(Tx_size)
+    {
+    	HAL_UART_Transmit_DMA(&huart1, TxBuffer, Tx_size);
+        LED1_T;
+    }
+
     delay_ms(50);
     key = KEY_Scan(0);
     if(key == KEY0_PRES)
